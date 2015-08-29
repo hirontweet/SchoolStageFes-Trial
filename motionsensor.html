@@ -11,35 +11,29 @@
     var yValue;
     var zValue;
     var counter = 0;
+    // 振る閾値
+    // 15.0はかなりおもいっきり振らないと反応しないが、実際に長く振ると疲れてしまいそう。10.0~12.5が良いかも
+    var THRESHOLD = 15.0;
 
+    // デバイスの加速度センサのイベントリスナーを登録
     window.addEventListener("devicemotion", function(event1){
+
         var x = event1.accelerationIncludingGravity.x;
-        var y = event1.accelerationIncludingGravity.y;
-        var z = event1.accelerationIncludingGravity.z;
 
         x = Math.round(x * 10) / 10;
-        y = Math.round(y * 10) / 10;
-        z = Math.round(z * 10) / 10;
 
-        // xValue, yValue, zValueが空なら初期値として代入
+        // xValueが空なら初期値として代入
         if(typeof xValue === 'undefined'){
             xValue = x;
         }
-        if(typeof yValue === 'undefined'){
-            yValue = y;
-        }
-        if(typeof zValue === 'undefined'){
-            zValue = z;
-        }
 
-        if((Math.abs(xValue - x) > 2.5) || (Math.abs(yValue - y) > 2.5) || (Math.abs(zValue - z) > 2.5)){
+        // 差が閾値よりも大きいか比較する
+        if(Math.abs(xValue - x) > THRESHOLD){
             counter++;
         }
 
         // Update the value
         xValue = x;
-        yValue = y;
-        zValue = z;
 
         var counterElements = document.getElementById("counter");
         counterElements.innerHTML = "counter: " + counter + "<br>";
